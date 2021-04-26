@@ -8,11 +8,11 @@ function gpl() {
 		local f=$?
 		if [ ! $f -eq 0 ]
 		then
-			echo "cd $i failed. Continue..."
+			echo "cd \`$i\` failed. Continue..."
 		else
 			if [ ! command git rev-parse --is-inside-work-tree &>/dev/null ]
 			then
-				echo "$i is not inside git repo."
+				echo "\`$i\` is not inside git repo."
 			else
 				local gitdir=$(git rev-parse --absolute-git-dir 2>/dev/null)
 				if [[ $lastgitdir && $gitdir = $lastgitdir ]]
