@@ -2,6 +2,6 @@
 #!desc=NUIST network auto login module
 
 [Script]
-auto-nuist = type=cron,cronexp="10 7 * * *",wake-system=1,script-path=scripts/auto-nuist.js
-auto-inuist = type=event,event-name=network-changed,script-path=scripts/auto-inuist.js
+auto-nuist = type=cron,cronexp="10 7 * * *",wake-system=1,timeout=15,script-path=scripts/auto-nuist.js
+auto-inuist = type=event,event-name=network-changed,timeout=15,script-path=scripts/auto-inuist.js
 
