@@ -27,18 +27,6 @@ function _gpl() {
 }
 
 function gpl() {
-	add-zsh-hook -L chpwd | grep _togglePipenvShell &>/dev/null
-	local f=$?
-	if [[ $f -eq 0 ]]
-	then
-		add-zsh-hook -d chpwd _togglePipenvShell
-		local f=$?
-		if [[ $f -eq 0 ]]
-		then
-			local _pipenv_shell_hook=1
-		fi
-	fi
-
 	echo $(pwd)
 	echo -----
 
@@ -49,7 +37,7 @@ function gpl() {
 		for i in $(ls -d */)
 		do
 			echo $i
-			cd $i
+			cd -q $i
 			local f=$?
 			if [[ ! $f -eq 0 ]]
 			then
@@ -68,7 +56,7 @@ function gpl() {
 						local lastgitdir=$gitdir
 					fi
 				fi
-				cd ..
+				cd -q ..
 			fi
 			echo -----
 		done
@@ -80,11 +68,6 @@ function gpl() {
 			echo ${$(git rev-parse --absolute-git-dir 2>/dev/null)%/.git}
 			_gpl $@
 		fi
-	fi
-
-	if [[ $_pipenv_shell_hook -eq 1 ]]
-	then
-		add-zsh-hook chpwd _togglePipenvShell
 	fi
 }
 
