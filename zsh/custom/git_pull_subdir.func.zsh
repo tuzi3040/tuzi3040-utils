@@ -36,19 +36,17 @@ function gpl() {
 		fi
 	fi
 
-	echo $(pwd)
+	pwd
 	echo -----
+	local gitdirs=()
 
-	ls -d */ &>/dev/null
-	local f=$?
-	if [[ $f -eq 0 ]]
+	if ls -d */ &>/dev/null
 	then
 		for i in $(ls -d */)
 		do
 			echo $i
 			cd -q $i
-			local f=$?
-			if [[ ! $f -eq 0 ]]
+			if [[ $? -ne 0 ]]
 			then
 				echo "cd \`$i\` failed. Continue..."
 			else
@@ -57,12 +55,13 @@ function gpl() {
 					echo "\`$i\` is not inside git repo."
 				else
 					local gitdir=$(git rev-parse --absolute-git-dir 2>/dev/null)
-					if [[ $lastgitdir && $gitdir = $lastgitdir ]]
+					echo gitdir = $gitdir
+					if [[ ! -z $gitdirs ]] && (( $gitdirs[(Ie)$gitdir] ))
 					then
-						echo "Git dir same with last one. Skip..."
+						echo "Git dir already processed. Skip..."
 					else
 						_gpl $@
-						local lastgitdir=$gitdir
+						gitdirs+=($gitdir)
 					fi
 				fi
 				cd -q ..
@@ -74,7 +73,7 @@ function gpl() {
 		then
 			echo "\`$(pwd)\` is not inside git repo."
 		else
-			echo ${$(git rev-parse --absolute-git-dir 2>/dev/null)%/.git}
+			echo gitdir = `git rev-parse --absolute-git-dir 2>/dev/null`
 			_gpl $@
 		fi
 	fi
