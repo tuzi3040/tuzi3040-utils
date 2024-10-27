@@ -27,6 +27,15 @@ function _gpl() {
 }
 
 function gpl() {
+	if (( $+commands[security] ))
+	then
+		security show-keychain-info `security default-keychain | sed -Ee 's/^ *"//' -e 's/" *//'` 2> /dev/null
+		if [[ $? -ne 0 ]]
+		then
+			security unlock-keychain
+		fi
+	fi
+
 	echo $(pwd)
 	echo -----
 
